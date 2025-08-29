@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Airplay - Telegram Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Airplay">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Three.js для 3D графики -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- TWEEN.js для анимаций -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+</head>
+<body>
+    <!-- Главное меню -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-content">
+            <h1 class="game-title">✈️ AIRPLAY</h1>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Лучший счёт:</span>
+                    <span id="best-score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Монеты:</span>
+                    <span id="coins">0</span>
+                </div>
+            </div>
+            
+            <div class="menu-buttons">
+                <button id="play-btn" class="btn-primary">🚀 ИГРАТЬ</button>
+                <button id="shop-btn" class="btn-secondary">🛒 МАГАЗИН</button>
+                <button id="share-btn" class="btn-secondary">📤 ПОДЕЛИТЬСЯ</button>
+            </div>
+        </div>
+        
+        <div class="sponsor-banner">
+            <div class="banner-content">
+                <span>🎯 Реклама | Играй больше - зарабатывай больше!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран игры -->
+    <div id="game-screen" class="screen">
+        <div class="game-ui">
+            <div class="score-display">
+                <span>Счёт: <span id="current-score">0</span></span>
+            </div>
+            <div class="coins-display">
+                <span>💰 <span id="game-coins">0</span></span>
+            </div>
+            <button id="pause-btn" class="pause-btn">⏸️</button>
+        </div>
+        
+        <div id="game-container"></div>
+        
+        <div class="mobile-controls">
+            <div class="control-hint">Касайтесь экрана для управления</div>
+        </div>
+    </div>
+
+    <!-- Экран паузы -->
+    <div id="pause-screen" class="screen overlay">
+        <div class="modal">
+            <h2>⏸️ ПАУЗА</h2>
+            <div class="modal-buttons">
+                <button id="resume-btn" class="btn-primary">▶️ ПРОДОЛЖИТЬ</button>
+                <button id="restart-btn" class="btn-secondary">🔄 ЗАНОВО</button>
+                <button id="menu-btn" class="btn-secondary">🏠 МЕНЮ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран конца игры -->
+    <div id="game-over-screen" class="screen overlay">
+        <div class="modal">
+            <h2>💥 ИГРА ОКОНЧЕНА!</h2>
+            <div class="game-over-stats">
+                <div class="stat">Ваш счёт: <span id="final-score">0</span></div>
+                <div class="stat">Получено монет: <span id="earned-coins">0</span></div>
+                <div class="stat best-score" id="new-record" style="display: none;">🏆 НОВЫЙ РЕКОРД!</div>
+            </div>
+            <div class="modal-buttons">
+                <button id="play-again-btn" class="btn-primary">🚀 ЕЩЁ РАЗ</button>
+                <button id="share-score-btn" class="btn-secondary">📤 ПОДЕЛИТЬСЯ</button>
+                <button id="back-menu-btn" class="btn-secondary">🏠 МЕНЮ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Магазин -->
+    <div id="shop-screen" class="screen">
+        <div class="shop-header">
+            <h2>🛒 МАГАЗИН</h2>
+            <div class="coins-display">
+                <span>💰 <span id="shop-coins">0</span></span>
+            </div>
+            <button id="close-shop-btn" class="close-btn">✕</button>
+        </div>
+        
+        <div class="shop-content">
+            <div class="shop-category">
+                <h3>✈️ САМОЛЁТЫ</h3>
+                <div class="shop-items">
+                    <div class="shop-item" data-type="plane" data-id="default">
+                        <div class="item-preview">✈️</div>
+                        <div class="item-info">
+                            <div class="item-name">Стандартный</div>
+                            <div class="item-price owned">В наличии</div>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-item" data-type="plane" data-id="fighter">
+                        <div class="item-preview">🛩️</div>
+                        <div class="item-info">
+                            <div class="item-name">Истребитель</div>
+                            <div class="item-price">💰 100</div>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-item" data-type="plane" data-id="jet">
+                        <div class="item-preview">🚀</div>
+                        <div class="item-info">
+                            <div class="item-name">Реактивный</div>
+                            <div class="item-price">💰 250</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="shop-category">
+                <h3>⚡ БОНУСЫ</h3>
+                <div class="shop-items">
+                    <div class="shop-item" data-type="powerup" data-id="shield">
+                        <div class="item-preview">🛡️</div>
+                        <div class="item-info">
+                            <div class="item-name">Щит на старте</div>
+                            <div class="item-price">💰 50</div>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-item" data-type="powerup" data-id="coins">
+                        <div class="item-preview">💰</div>
+                        <div class="item-info">
+                            <div class="item-name">x2 монеты</div>
+                            <div class="item-price">💰 75</div>
+                        </div>
+                    </div>
+                    
+                    <div class="shop-item" data-type="powerup" data-id="slow">
+                        <div class="item-preview">🐌</div>
+                        <div class="item-info">
+                            <div class="item-name">Замедление времени</div>
+                            <div class="item-price">💰 100</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно покупки -->
+    <div id="purchase-modal" class="screen overlay" style="display: none;">
+        <div class="modal small">
+            <h3 id="purchase-title">Подтвердить покупку</h3>
+            <p id="purchase-text">Хотите купить этот предмет?</p>
+            <div class="modal-buttons">
+                <button id="confirm-purchase" class="btn-primary">✅ КУПИТЬ</button>
+                <button id="cancel-purchase" class="btn-secondary">❌ ОТМЕНА</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран загрузки -->
+    <div id="loading-screen" class="screen overlay">
+        <div class="loading-content">
+            <div class="spinner">✈️</div>
+            <div class="loading-text">Загрузка...</div>
+        </div>
+    </div>
+
+    <!-- <script src="game.js"></script> -->
+    <script src="game3d.js"></script>
+</body>
+</html>

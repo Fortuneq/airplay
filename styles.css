@@ -1,0 +1,517 @@
+/* Основные стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+/* Экраны */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.9);
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.screen.overlay {
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+}
+
+/* Главное меню */
+#menu-screen {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+}
+
+.menu-content {
+    text-align: center;
+    z-index: 10;
+}
+
+.game-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    animation: titlePulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes titlePulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    max-width: 300px;
+    margin: 0 auto 2rem auto;
+    gap: 20px;
+}
+
+.stat-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin-bottom: 5px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Кнопки */
+.btn-primary, .btn-secondary {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active, .btn-secondary:active {
+    transform: scale(0.95);
+}
+
+/* Спонсорский баннер */
+.sponsor-banner {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(255, 215, 0, 0.9);
+    color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    animation: bannerFloat 3s ease-in-out infinite;
+}
+
+@keyframes bannerFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+/* Игровой экран */
+#game-screen {
+    padding: 0;
+    background: linear-gradient(180deg, #87CEEB, #98FB98);
+}
+
+.game-ui {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent);
+}
+
+.score-display, .coins-display {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    backdrop-filter: blur(5px);
+}
+
+.pause-btn {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#game-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+.mobile-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.control-hint {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    animation: hintBlink 2s ease-in-out infinite;
+}
+
+@keyframes hintBlink {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+/* Модальные окна */
+.modal {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 90%;
+    width: 350px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.modal.small {
+    width: 280px;
+    padding: 20px;
+}
+
+@keyframes modalSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal h2, .modal h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.modal-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Экран конца игры */
+.game-over-stats {
+    margin: 20px 0;
+}
+
+.stat {
+    padding: 8px 0;
+    font-size: 1.1rem;
+}
+
+.best-score {
+    color: #ff6b6b;
+    font-weight: bold;
+    animation: newRecordGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes newRecordGlow {
+    0% { text-shadow: 0 0 5px #ff6b6b; }
+    100% { text-shadow: 0 0 15px #ff6b6b, 0 0 25px #ff6b6b; }
+}
+
+/* Магазин */
+#shop-screen {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    padding: 0;
+}
+
+.shop-header {
+    width: 100%;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.shop-header h2 {
+    margin: 0;
+}
+
+.close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.shop-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.shop-category {
+    margin-bottom: 30px;
+}
+
+.shop-category h3 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.shop-items {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.shop-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    backdrop-filter: blur(5px);
+}
+
+.shop-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.shop-item.owned {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.2);
+}
+
+.shop-item.selected {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.2);
+}
+
+.item-preview {
+    font-size: 2rem;
+    width: 50px;
+    text-align: center;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.item-price.owned {
+    color: #4CAF50;
+}
+
+/* Экран загрузки */
+#loading-screen {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.spinner {
+    font-size: 3rem;
+    animation: spin 2s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .btn-primary, .btn-secondary {
+        min-width: 250px;
+        font-size: 1rem;
+    }
+    
+    .stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    .shop-items {
+        grid-template-columns: 1fr;
+    }
+    
+    .game-ui {
+        padding: 15px;
+    }
+}
+
+/* Анимации для элементов интерфейса */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(0); }
+}
+
+/* Эффекты частиц на фоне */
+#menu-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    animation: backgroundFloat 10s ease-in-out infinite alternate;
+}
+
+@keyframes backgroundFloat {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-10px) rotate(2deg); }
+}
+
+/* Эффекты нажатия */
+.btn-primary::after, .btn-secondary::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.btn-primary:active::after, .btn-secondary:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Скрытие элементов */
+.hidden {
+    display: none !important;
+}
