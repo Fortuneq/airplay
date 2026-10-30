@@ -1,29 +1,47 @@
 # Airplay — arcade plane game for Telegram
 
-A casual arcade game that runs as a Telegram Mini App / PWA: fly a plane, dodge obstacles, collect coins, buy new planes and power-ups in the shop. Includes a 2D canvas version and an experimental 3D mode.
+A casual arcade game that runs as a **Telegram Mini App / PWA**: fly a plane, dodge obstacles, collect coins, unlock new planes and power-ups in the shop and share your score with friends. Includes a 2D canvas version and an experimental 3D mode.
+
+<p align="center"><img src="docs/screenshots/menu.jpg" width="260" alt="Main menu"></p>
+
+## Game loop
+
+```mermaid
+stateDiagram-v2
+    [*] --> Menu
+    Menu --> Playing: Play
+    Menu --> Shop: Shop
+    Shop --> Menu
+    Playing --> Paused: pause
+    Paused --> Playing: resume
+    Playing --> GameOver: lives = 0
+    GameOver --> Playing: Play again
+    GameOver --> Menu
+```
 
 ## Features
 
-- Endless arcade gameplay with score, best score and lives
-- Coins, a shop with unlockable planes and power-ups
-- Menu, pause and game-over screens
+- Endless arcade gameplay with score, best score and three lives
+- Coins collected during flights, spent in the shop on new planes and power-ups
+- Menu, pause, game-over and shop screens
+- Share button and a promo banner slot
 - Fullscreen portrait PWA manifest for Telegram
 
 ## Files
 
 ```
-index.html   — entry point
-game.js      — 2D canvas game
-game3d.js    — 3D mode
-styles.css   — UI styles
-manifest.json
+index.html     — entry point and UI screens
+game.js        — 2D canvas game: state machine, physics, obstacles, coins, shop
+game3d.js      — experimental 3D mode
+styles.css     — UI styles
+manifest.json  — PWA manifest
 ```
 
 ## Run locally
 
 ```bash
 python3 -m http.server 8000
-# open http://localhost:8000
+# open http://localhost:8000 in a mobile viewport
 ```
 
 ## Docs
